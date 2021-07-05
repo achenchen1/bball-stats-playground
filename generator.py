@@ -13,13 +13,13 @@ def fetcher(games):
         cURL.setopt(cURL.URL, "https://www.basketball-reference.com{}".format(game_url))
         cURL.perform()
 
-        with open("{}".format(game_url.rsplit('/', 1)[-1]), "wb+") as output_file:
+        with open("game_htmls/{}".format(game_url.rsplit('/', 1)[-1]), "wb+") as output_file:
             output_file.write(e.getbuffer())
 
         del e
 
 
-def process_creator(children=4):
+def process_creator(children=16):
     # Load all our urls into a list
     with open("schedule_scraper/urls.txt") as url_file:
         urls = url_file.read().split()
