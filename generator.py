@@ -6,17 +6,17 @@ processes_array = []
 
 def fetcher(games):
     cURL = pycurl.Curl()
-    e = BytesIO()
-    cURL.setopt(cURL.WRITEDATA, e)
 
     for game_url in games:
+        e = BytesIO()
+        cURL.setopt(cURL.WRITEDATA, e)
         cURL.setopt(cURL.URL, "https://www.basketball-reference.com{}".format(game_url))
         cURL.perform()
 
         with open("{}".format(game_url.rsplit('/', 1)[-1]), "wb+") as output_file:
             output_file.write(e.getbuffer())
 
-        e.flush()
+        del e
 
 
 def process_creator(children=4):
