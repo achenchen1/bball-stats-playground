@@ -5,7 +5,8 @@ class Team:
         self.players = []
 
 class BoxScore:
-    def __init__(self, stats_list):
+    def __init__(self, stats_list, quarter=None):
+        self.quarter = quarter
         self.stats = {}
         # if there's a "reason", it means they didn't play.
         if stats_list[0]["data-stat"] == "reason":
