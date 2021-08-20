@@ -1,32 +1,6 @@
 from bs4 import BeautifulSoup
+from stat_structures import Team, BoxScore
 
-class Team:
-    def __init__(self, name, abbreviation):
-        self.name = name
-        self.abbreviation = abbreviation
-        self.players = []
-
-class BoxScoreBasic:
-    def __init__(self, stats_list):
-        self.stats = {}
-        self.stats["mp"] = next(stats_list)
-        self.stats["fg"] = next(stats_list)
-        self.stats["fga"] = next(stats_list)
-        self.stats["fgpt"] = next(stats_list)
-        self.stats["tpm"] = next(stats_list)
-        self.stats["tpa"] = next(stats_list)
-        self.stats["ft"] = next(stats_list)
-        self.stats["fta"] = next(stats_list)
-        self.stats["orb"] = next(stats_list)
-        self.stats["drb"] = next(stats_list)
-        self.stats["trb"] = next(stats_list)
-        self.stats["ast"] = next(stats_list)
-        self.stats["stl"] = next(stats_list)
-        self.stats["blk"] = next(stats_list)
-        self.stats["tov"] = next(stats_list)
-        self.stats["pf"] = next(stats_list)
-        self.stats["pts"] = next(stats_list)
-        self.stats["pm"] = next(stats_list)
 # [<a href="/teams/MIL/2021.html" itemprop="name">Milwaukee Bucks</a>, <a href="/teams/BRK/2021.html" itemprop="name">Brooklyn Nets</a>]
 
 def single_game(file_name):
@@ -52,20 +26,38 @@ def single_game(file_name):
     team_a = Team(team_names[0].contents[0], team_names[0]["href"].split("/")[-2])
     team_b = Team(team_names[1].contents[0], team_names[1]["href"].split("/")[-2])
 
-    player_stats = []
-    for row in team_a_tables[0]:
-        player_stats.append(BoxScoreBasic(tag.string for tag in row.find_all("td")))
+    team_a_stats = player_stats_from_tables(team_a_tables)
+    team_b_stats = player_stats_from_tables(team_b_tables)
 
-    for stat in player_stats:
-        print(stat.stats)
+def player_stats_from_tables(team_tables):
+    # Don't have a collection of the players yet. We assume that the full box score has all the players
+    players = {}
+    for row in team_tables[0]:
+        players[get_name_id_from_row(row)] = [[], row.find("th").string]
 
-    for x in team_a_tables[0]:
-        b = x.find_all("td")
-        for y in b:
-            print(y.string, end=" | ")
-        print("")
+    # Want to omit the last one, since that one is "advanced stats"
+    for table in team_tables[:-1]:
+        for row in table:
+            box_score = BoxScore(row.find_all("td"))
+            name_id = get_name_id_from_row(row)
+            players[name_id][0].append(box_score)
 
-single_game("game_htmls/202012220BRK.html")
+    # Parse last table
+    for row in team_tables[-1]:
+        box_score = BoxScore(row.find_all("td"))
+
+    return players
+        
+def get_name_id_from_row(row):
+    tag = row.find("th")
+    if "data-append-csv" in tag.attrs:
+        return tag["data-append-csv"]
+    else:
+        player_url = tag.find("a")["href"]
+        return player_url[player_url.rfind("/")+1:-5]
+
+
+single_game("game_htmls/202012270CHI.html")
 
 # for x in team_a_tables:
 #   b = x.find_all("td")
