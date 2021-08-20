@@ -67,9 +67,6 @@ def get_name_id_from_row(row):
     tag = row.find("th")
     if "data-append-csv" in tag.attrs:
         return tag["data-append-csv"]
-    else:
-        player_url = tag.find("a")["href"]
-        return player_url[player_url.rfind("/")+1:-5]
 
-
-single_game("game_htmls/202012270CHI.html")
+    player_url = tag.find("a")["href"]
+    return player_url[player_url.rfind("/")+1:-5]
