@@ -1,3 +1,6 @@
+# generator.py
+# Takes our urls, and then cURLs ALL the game files
+
 from io import BytesIO
 import multiprocessing as mp
 import pycurl

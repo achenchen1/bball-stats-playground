@@ -1,3 +1,5 @@
+# Fetches all the 2021 games
+
 from bs4 import BeautifulSoup
 from io import BytesIO
 import pycurl
