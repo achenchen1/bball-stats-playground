@@ -6,7 +6,7 @@ processes_array = []
 def tester(i, lock, test):
     for x in range(999):
         with lock:
-            rc = test.execute("INSERT INTO  \"test_table\" (\"game_id\", \"player_id\", \"mp\", \"fg\", \"fga\", \"fg_pct\", \"fg3\", \"fg3a\", \"fg3_pct\", \"ft\", \"fta\", \"ft_pct\", \"orb\", \"drb\", \"trb\", \"ast\", \"stl\", \"blk\", \"tov\", \"pf\", \"pts\", \"plus_minus\") VALUES ('{0}', '{0}', '{0}', '{0}', '{0}', '{0}.0', '{0}', '{0}', '{0}.0', '{0}', '{0}', '{0}.0', '{0}', '{0}', '{0}', '{0}', '{0}', '{0}', '{0}', '{0}', '{0}', '{0}.0');".format(x%7+i*10));
+            rc = test.execute("INSERT INTO  test_table (game_id, player_id, mp, fg, fga, fg_pct, fg3, fg3a, fg3_pct, ft, fta, ft_pct, orb, drb, trb, ast, stl, blk, tov, pf, pts, plus_minus) VALUES ('{0}', '{0}', '{0}', '{0}', '{0}', '{0}.0', '{0}', '{0}', '{0}.0', '{0}', '{0}', '{0}.0', '{0}', '{0}', '{0}', '{0}', '{0}', '{0}', '{0}', '{0}', '{0}', '{0}.0');".format(x%7+i*10));
             if x%7 == 6:
                 test.commit()
 

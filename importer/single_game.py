@@ -51,7 +51,7 @@ def players_stats_from_tables(team_tables):
     # Don't have a collection of the players yet. We assume that the full box score has all the players
     players = {}
     for row in team_tables[0]:
-        players[get_name_id_from_row(row)] = {"stats:": [], "name": row.find("th").string}
+        players[get_name_id_from_row(row)] = {"stats": [], "name": row.find("th").string}
 
     # Want to omit the last one, since that one is "advanced stats"
     for table_num, table in enumerate(team_tables[:-1]):
